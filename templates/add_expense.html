@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Expense | Finance Zone</title>
+    <style>
+
+        body {
+            background: linear-gradient(left to right, #2b2a28, #2b2a28);
+            font-family: "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #6a8c6d;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            padding: 40px 50px;
+            width: 420px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #133c5e;
+        }
+
+        input, textarea, select {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #0078d7;
+            outline: none;
+            box-shadow: 0 0 5px #0078d7;
+        }
+
+        button {
+            background-color: #133c5e;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #005fa3;
+            transform: scale(1.05);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #0078d7;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+            color: #333;
+            font-weight: 600;
+        }
+        .flash-overlay {
+    position: fixed;          /* Screen ke upar fix rahe */
+    top: 20px;                /* Thoda neeche */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4CAF50;      /* Green success color */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.20);
+    z-index: 9999;            /* Sabse upar dikhe */
+    animation: fadeOut 3s ease forwards;
+}
+
+/* Error message color */
+.flash-overlay.error {
+    background: #f44336;
+}
+
+/* Auto hide animation */
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+    
+}
+.rupee-box {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.rupee-box span {
+    position: absolute;
+    left: 10px;
+    font-size: 18px;
+    color: #425644;   /* your theme green */
+    font-weight: bold;
+}
+
+.rupee-box input {
+    width: 100%;
+    padding: 12px 12px 12px 32px; /* extra left padding for ₹ symbol */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+ 
+</style>
+</head>
+
+
+<body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-overlay {{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+
+    <div class="form-container">
+        <h2>💰 Add New Expense</h2>
+        
+            <form action="/add_expense" method="POST" class="expense-form">
+
+    <label>Category:</label>
+    <select name="category" required>
+        <option value="">-- Select Category --</option>
+        <option value="Food">Food</option>
+        <option value="Transport">Transport</option>
+        <option value="Education">Education</option>
+        <option value="Health">Health</option>
+        <option value="Rent">Rent</option>
+        <option value="electricity">Electricity</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label>Amount (₹):</label>
+<div class="rupee-box">
+    <span>₹</span>
+    <input type="number" name="amount" required min="1" placeholder="0">
+</div>
+
+    <label>Payment Mode:</label>
+    <select name="payment_mode" required>
+        <option value="">-- Select Payment Mode --</option>
+        <option value="Cash">Cash</option>
+        <option value="Online">Online</option>
+        <option value="Card">Card</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label>Date:</label>
+    <input type="date" name="expense_date" required>
+
+    <label>Description:</label>
+    <input type="text" name="description" required placeholder="Write small note">
+
+    <button type="submit" class="btn">Add Expense</button>
+</form>
+
+        <a href="/finance">⬅ Back to Dashboard</a>
+    </div>
+
+</body>
+</html>
+

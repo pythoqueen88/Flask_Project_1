@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Report | Finance Zone</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background: linear-gradient(to right,#3b4141, #3b4141);
+            font-family: "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .report-container {
+            background: #82dfea;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            padding: 30px 40px;
+            margin-top: 50px;
+            width: 90%;
+            max-width: 950px;
+        }
+
+        h2 {
+            color: #043318;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: xx-large;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #0078d7;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .summary {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #0078d7;
+            font-weight: bold;
+        }
+
+        canvas {
+            margin-top: 40px;
+        }
+
+        select, button {
+            padding: 8px 12px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="report-container">
+    <h2>📊 Expense Report</h2>
+
+    <!-- Month Filter -->
+    <form method="POST" style="text-align:center;">
+        <select name="month">
+            <option value="">All Months</option>
+            {% for m in months %}
+            <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>
+                {{ m }}
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit">View Report</button>
+    </form>
+
+    <!-- Download -->
+    {% if selected_month %}
+    <form method="POST" action="{{ url_for('download_report') }}" style="text-align:center;">
+        <input type="hidden" name="month" value="{{ selected_month }}">
+        <button type="submit">📥 Download Report</button>
+    </form>
+    {% endif %}
+
+    {% if expenses %}
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Amount (₹)</th>
+            <th>Payment Mode</th>
+            <th>Date</th>
+            <th>Description</th>
+        </tr>
+
+        {% for exp in expenses %}
+        <tr>
+            <td>{{ exp[0] }}</td>
+            <td>{{ exp[1] }}</td>
+            <td>{{ exp[2] }}</td>
+            <td>{{ exp[3] }}</td>
+            <td>{{ exp[4] }}</td>
+            <td>{{ exp[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="summary">
+        💰 Total Expense : ₹{{ total }}
+    </div>
+
+    <!-- ✅ SAFE DATA PASS (NO ERROR METHOD) -->
+    <div id="chart-data"
+         data-categories='{{ categories | tojson }}'
+         data-amounts='{{ amounts | tojson }}'>
+    </div>
+
+    <canvas id="expenseChart" height="120"></canvas>
+
+    {% else %}
+    <p style="text-align:center;">No expenses found!</p>
+    {% endif %}
+
+    <a href="/finance">⬅ Back to Dashboard</a>
+</div>
+
+<!-- ✅ ERROR-FREE JAVASCRIPT -->
+<script>
+    const dataDiv = document.getElementById("chart-data");
+
+    const categories = JSON.parse(dataDiv?.dataset.categories || "[]");
+    const amounts = JSON.parse(dataDiv?.dataset.amounts || "[]");
+
+    if (categories.length && amounts.length) {
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: categories,
+                datasets: [{
+                    label: 'Expenses (₹)',
+                    data: amounts,
+                    backgroundColor: '#0078d7'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

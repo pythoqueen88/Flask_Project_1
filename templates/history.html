@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game History</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body{
+            margin:0;
+            font-family:Segoe UI, Arial, sans-serif;
+            background:#000;
+            color:#fff;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            padding:25px;
+        }
+
+        h2{
+            color:#ff2b2b;
+            margin-bottom:8px;
+        }
+
+        .stats{
+            margin-bottom:20px;
+            font-size:14px;
+            color:#aaa;
+        }
+
+        table{
+            width:95%;
+            max-width:900px;
+            border-collapse:collapse;
+            background:#111;
+            border-radius:10px;
+            overflow:hidden;
+            box-shadow:0 0 12px rgba(255,0,0,0.25);
+        }
+
+        th{
+            background:#181818;
+            color:#ff2b2b;
+            padding:12px;
+            font-weight:600;
+        }
+
+        td{
+            padding:10px;
+            background:#1c1c1c;
+            border-bottom:1px solid #333;
+        }
+
+        tr:hover td{
+            background:#ff2b2b;
+            color:#000;
+            transition:0.2s;
+        }
+
+        .best{
+            background:#00c853 !important;
+            color:#000 !important;
+            font-weight:bold;
+        }
+
+        .empty{
+            margin-top:40px;
+            background:#111;
+            padding:30px;
+            border-radius:10px;
+            text-align:center;
+            color:#bbb;
+        }
+
+        button{
+            margin-top:25px;
+            background:#ff2b2b;
+            color:white;
+            border:none;
+            padding:10px 18px;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            opacity:0.85;
+        }
+
+        @media(max-width:700px){
+            table{
+                font-size:12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>🎮 Your Game History</h2>
+
+{% if games %}
+
+<div class="stats">
+    Total Games Played: <b>{{ games|length }}</b>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Difficulty</th>
+            <th>Score</th>
+            <th>Time (s)</th>
+            <th>Accuracy</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% set best = games | max(attribute='score') %}
+
+        {% for g in games %}
+        <tr class="{% if g.score == best.score %}best{% endif %}">
+            <td>{{ loop.index }}</td>
+            <td>{{ g.level|capitalize }}</td>
+            <td>{{ g.score }}</td>
+            <td>{{ g.time_taken }}</td>
+            <td>{{ g.accuracy }}%</td>
+            <td>
+                {{ g.created_at.strftime('%d-%m-%Y %H:%M') if g.created_at else '-' }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<div class="empty">
+    <h3>No games played yet 😢</h3>
+    <p>Start your first Focus Challenge now!</p>
+</div>
+
+{% endif %}
+
+<button onclick="location.href='/game'">⬅ Back to Game</button>
+
+</body>
+</html>

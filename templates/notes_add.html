@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Notes</title>
+    <style>
+        body{
+            font-family:Segoe UI;
+            background:#2b2a28;
+            padding:40px;
+        }
+        .card{
+            max-width:650px;
+            margin:auto;
+            background:#ffffff;
+            padding:30px;
+            border-radius:14px;
+            box-shadow:0 8px 25px rgba(105, 93, 93, 0.1);
+        }
+        h2{text-align:center;color:#425644;}
+        input, select, textarea{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border-radius:8px;
+            border:1px solid #ccc;
+        }
+        textarea{height:120px;}
+        button{
+            margin-top:20px;
+            width:100%;
+            padding:12px;
+            background:#425644;
+            color:white;
+            border:none;
+            border-radius:25px;
+            font-size:16px;
+            cursor:pointer;
+        }
+        .flash{
+            background:#d4edda;
+            color:#155724;
+            padding:10px;
+            border-radius:8px;
+            margin-bottom:15px;
+            text-align:center;
+            animation:fadeOut 3s forwards;
+        }
+        @keyframes fadeOut{
+            0%{opacity:1;}
+            70%{opacity:1;}
+            100%{opacity:0;}
+        }
+
+        .back {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>📝 Add Study Notes</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <label style="color: rgba(64, 137, 161, 1);font-weight: 800; font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;">Date :</label>
+        <input type="date" name="note_date" required>
+
+        <label style="color: rgba(64, 137, 161, 1);font-weight: 800; font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;">Note Type :</label>
+        <select name="note_type" required>
+            <option value="">Select Type</option>
+            <option>Class Notes</option>
+            <option>Revision</option>
+            <option>Important</option>
+            <option>Exam Notes</option>
+        </select>
+
+        <label style="color: rgba(64, 137, 161, 1);font-weight: 800; font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;">Subject :</label>
+        <input type="text" name="subject" placeholder="Subject name" required>
+
+        <label style="color: rgba(64, 137, 161, 1);font-weight: 800; font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;">Unit :</label>
+        <input type="text" name="unit" placeholder="Unit number" required>
+
+
+        <label style="color: rgba(64, 137, 161, 1);font-weight: 800; font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;">Topic Name :</label>
+        <input type="text" name="topic_name" placeholder="here write topic name......." required>
+
+
+        <label style="color: rgba(64, 137, 161, 1);font-weight: 800; font-size: 16px; font-family: Georgia, 'Times New Roman', Times, serif;" >Notes Content :</label>
+        <textarea name="content" placeholder="Write your notes here..." required></textarea>
+
+        <label>Upload File (PDF / Image / Word etc.) :</label>
+        <input type="file" name="file" style="background:#f2f2f2;">
+
+        <button type="submit">💾 Save Notes</button>
+    </form>
+
+</div>
+<div class="back">
+    <a href="/study/notes">⬅ Back to notes manager </a>
+</div>
+</body>
+</html>

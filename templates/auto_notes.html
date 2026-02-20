@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Notes | IntelliMate</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ================= THEME VARIABLES ================= */
+:root{
+    --bg:#0f172a;
+    --card:#111827;
+    --panel:#0b1220;
+    --box:#1e293b;
+    --text:white;
+}
+
+/* LIGHT MODE */
+:root.light{
+    --bg:#f1f5f9;
+    --card:white;
+    --panel:#e2e8f0;
+    --box:white;
+    --text:#111;
+}
+
+/* ================= BASE ================= */
+body{
+    background:var(--bg);
+    color:var(--text);
+    height:100vh;
+}
+
+.main{
+    display:flex;
+    height:100vh;
+}
+
+/* LEFT */
+.left{
+    flex:3;
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+}
+
+/* RIGHT HISTORY */
+.right{
+    flex:1;
+    border-left:1px solid #333;
+    padding:15px;
+    overflow-y:auto;
+    background:var(--card);
+}
+
+/* CARDS */
+.card{
+    background:var(--card);
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:12px;
+}
+
+.top-bar{
+    display:flex;
+    gap:10px;
+}
+
+input{
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* TOOLS */
+.tools{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.tool{
+    background:var(--box);
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.tool input{display:none}
+
+/* OUTPUT */
+.output{
+    flex:1;
+    background:var(--panel);
+    border-radius:12px;
+    padding:15px;
+    overflow-y:auto;
+    white-space:pre-wrap;
+}
+
+/* HISTORY */
+.history-item{
+    background:var(--box);
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+    cursor:pointer;
+    font-size:14px;
+    position:relative;
+}
+
+.history-item:hover{
+    background:#ef4444;
+}
+
+.delete-btn{
+    position:absolute;
+    right:8px;
+    top:5px;
+    font-size:12px;
+}
+
+.search{
+    width:100%;
+    margin-bottom:10px;
+    padding:8px;
+    border-radius:6px;
+    border:none;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+
+.limit-box{
+    background:#ffeaea;
+    color:#c40000;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:12px;
+    font-weight:600;
+    text-align:center;
+}
+.back {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back a {
+            color: #bbe169;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+</style>
+</head>
+
+<body>
+
+<div class="main">
+
+<!-- LEFT -->
+<div class="left">
+
+<div class="card">
+
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="top-bar">
+    <input id="topicBox" name="topic" placeholder="Enter topic..." required>
+    <button>Generate</button>
+</div>
+
+<div class="tools">
+    <div class="tool" onclick="startVoice()">🎤 Mic</div>
+    <div class="tool" onclick="toggleMode()">🌙 Mode</div>
+</div>
+
+</form>
+
+</div>
+{% if message %}
+    <div class="limit-box">{{ message }}</div>
+    {% endif %}
+<div id="outputBox" class="output">
+{% if notes %}{{ notes }}{% endif %}
+</div>
+
+<div class="actions">
+    <button onclick="copyText()">Copy</button>
+
+</div>
+
+</div>
+
+<!-- RIGHT HISTORY -->
+<div class="right">
+
+<h3>📜 History</h3>
+
+<input class="search" placeholder="Search..." onkeyup="searchHistory(this.value)">
+
+{% for h in history %}
+<div class="history-item history-card"
+     data-topic="{{h.topic}}"
+     onclick="showNote(`{{h.notes|escape}}`)">
+{{h.topic}}
+<span class="delete-btn" onclick="deleteNote(event, {{h.id}})">❌</span>
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+<script>
+
+/* MIC → topic box me text jayega */
+function startVoice(){
+    if (!('webkitSpeechRecognition' in window)){
+        alert("Use Chrome browser");
+        return;
+    }
+
+    const rec = new webkitSpeechRecognition();
+    rec.lang = "en-IN";
+
+    rec.onresult = e=>{
+        topicBox.value += " " + e.results[0][0].transcript;
+    };
+
+    rec.start();
+}
+
+/* THEME FULL PAGE */
+function toggleMode(){
+    document.documentElement.classList.toggle("light");
+}
+
+/* COPY */
+function copyText(){
+    navigator.clipboard.writeText(outputBox.innerText);
+}
+
+/* HISTORY */
+function showNote(text){
+    outputBox.innerText=text;
+}
+
+function deleteNote(e,id){
+    e.stopPropagation();
+    fetch('/delete_note/'+id).then(()=>location.reload());
+}
+
+function searchHistory(val){
+    val=val.toLowerCase();
+    document.querySelectorAll('.history-card').forEach(el=>{
+        el.style.display = el.dataset.topic.toLowerCase().includes(val)?'block':'none';
+    });
+}
+
+/* PDF */
+</script>
+
+<div class="back">
+    <a href="/study">⬅ Back to Study Zone</a>
+</div>
+
+</body>
+</html>

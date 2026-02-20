@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IntelliMate | Home</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ================= BODY ================= */
+body{
+    background:linear-gradient(135deg,#0f172a,#111827);
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    position:fixed;
+    left:-260px;
+    top:0;
+    width:260px;
+    height:100%;
+    background:#0b1220;
+    padding:30px 20px;
+    transition:.35s;
+    z-index:2000;
+    box-shadow:4px 0 20px rgba(0,0,0,.5);
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar h2{
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-bottom:12px;
+    background:#1e293b;
+    transition:.25s;
+}
+
+.sidebar a:hover{
+    background:#ef4444;
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 30px;
+    background:#0b1220;
+    box-shadow:0 2px 12px rgba(0,0,0,.5);
+}
+
+/* hamburger */
+.menu-btn{
+    font-size:26px;
+    cursor:pointer;
+}
+
+/* logo */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:600;
+}
+
+.logo span{
+    font-size:26px;
+}
+
+/* ================= HERO ================= */
+.hero{
+    text-align:center;
+    padding:90px 20px 40px;
+    animation:fade 1s ease;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    color:#cbd5e1;
+}
+
+/* ================= ZONES ================= */
+.zone-container{
+    max-width:1100px;
+    margin:50px auto 100px;
+    padding:0 25px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+}
+
+.zone-card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.08);
+    padding:35px 25px;
+    border-radius:18px;
+    text-align:center;
+    transition:.3s;
+    opacity:0;
+    transform:translateY(40px);
+}
+
+.zone-card.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.zone-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 0 25px rgba(239,68,68,.35);
+}
+
+.zone-card h3{
+    margin-bottom:10px;
+}
+
+.zone-card p{
+    color:#cbd5e1;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.zone-card a{
+    display:inline-block;
+    padding:10px 24px;
+    background:#ef4444;
+    border-radius:25px;
+    text-decoration:none;
+    color:white;
+}
+
+.zone-card a:hover{
+    background:#dc2626;
+}
+
+/* ================= FOOTER ================= */
+footer{
+    text-align:center;
+    padding:18px;
+    background:#0b1220;
+    color:#aaa;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes fade{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <h2>⚡ IntelliMate</h2>
+
+    <a href="/">🏠 Home</a>
+    <a href="/study">📚 Study Zone</a>
+    <a href="/finance">💰 Finance</a>
+    <a href="/fun_focus">🎮 Fun & Focus</a>
+    <a href="/help">❓ Help</a>
+    
+
+    {% if 'user' in session %}
+        <a href="/logout">🚪 Logout</a>
+    {% endif %}
+
+    <a href="/">BACK</a>
+</div>
+
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    <div class="logo">
+        <span>🧠</span> IntelliMate
+    </div>
+</div>
+
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Welcome to IntelliMate</h1>
+    <p>Smart student Life Manager🧠👩‍🎓 </p>
+</div>
+
+
+{% if 'user' in session %}
+<!-- ZONES -->
+<div class="zone-container">
+
+    <div class="zone-card">
+        <h3>💰 Finance Zone</h3>
+        <p>Track expenses and manage money smartly.</p>
+        <a href="/finance">Enter</a>
+    </div>
+
+    <div class="zone-card">
+        <h3>📚 Study Zone</h3>
+        <p>Notes, goals, timetable and progress.</p>
+        <a href="/study">Enter</a>
+    </div>
+
+    <div class="zone-card">
+        <h3>🎮 Fun & Focus Zone</h3>
+        <p>Games, motivation & relaxation.</p>
+        <a href="/fun_focus">Enter</a>
+    </div>
+
+</div>
+{% endif %}
+
+<footer>
+© 2025 IntelliMate • Smart Life Manager
+</footer>
+
+
+<script>
+
+/* sidebar toggle */
+function toggleMenu(){
+    document.getElementById("sidebar").classList.toggle("active");
+}
+
+/* smooth card animation */
+const cards = document.querySelectorAll('.zone-card');
+
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.classList.add('show');
+        }
+    });
+},{threshold:0.2});
+
+cards.forEach(card=>observer.observe(card));
+
+</script>
+
+</body>
+</html>

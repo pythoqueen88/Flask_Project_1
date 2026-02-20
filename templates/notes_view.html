@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Notes | IntelliMate</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* ===== Background (PPT style gradient) ===== */
+body{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    min-height:100vh;
+    padding:30px;
+    overflow-x:hidden;
+}
+
+/* floating light blobs */
+body::before, body::after{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(120px);
+    z-index:-1;
+}
+body::before{background:#00f7ff; top:-100px; left:-80px;}
+body::after{background:#ff9bd3; bottom:-120px; right:-80px;}
+
+/* ===== Header ===== */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    color:white;
+}
+
+h1{
+    font-size:28px;
+    letter-spacing:1px;
+}
+
+/* ===== Controls ===== */
+.controls{
+    display:flex;
+    gap:12px;
+}
+
+select, button{
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+}
+
+select{
+    background:white;
+}
+
+button{
+    background:#222;
+    color:white;
+    cursor:pointer;
+}
+
+/* ===== Notes Grid ===== */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+}
+
+/* ===== Card ===== */
+.card{
+    display:flex;
+    flex-direction:column;
+    height:420px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    padding:20px;
+    border-radius:18px;
+    color:white;
+    box-shadow:0 15px 30px rgba(0,0,0,0.3);
+    animation:fade 0.6s ease;
+    transition:0.3s;
+    position:relative; 
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+@keyframes fade{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.delete-btn{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+
+    width: 34px;
+    height: 34px;
+
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.delete-btn:hover{
+    
+    transform: scale(1.08);
+}
+/* ===== Badges ===== */
+.badge{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:bold;
+    margin:2px;
+}
+
+/* Different colors */
+.type{ background:#ff9800; }
+.subject{ background:#03a9f4; }
+.unit{ background:#8bc34a; }
+.chapter{ background:#e91e63; }
+.date{ background:#9c27b0; }
+
+/* ===== Content ===== */
+.content{
+    background:white;
+    color:#333;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+    font-size:14px;
+    line-height:1.6;
+
+    white-space:pre-wrap;
+
+    /* ⭐ MAIN FIX */
+    height:220px;        /* fixed box height */
+    overflow-y:auto;     /* scroll inside */
+    overflow-x:hidden;
+
+    word-break:break-word;
+}
+/* ===== PRINT FIX ===== */
+@media print {
+
+    body{
+        background:white;
+         overflow:visible !important;
+    }
+
+    .controls{
+        display:none; /* hide buttons */
+    }
+
+    .grid{
+        display:block !important;
+    }
+
+    .card{
+        display:block !important;
+        height:auto !important;
+        margin-bottom:25px;
+        break-inside:avoid;
+        page-break-inside:avoid;
+        box-shadow:none;
+        background:white;
+        color:black;
+    }
+
+    .content{
+        height:auto !important;    
+        max-height:none !important;  /* ⭐ full height */
+        overflow:visible !important; /* ⭐ show all text */
+    }
+}
+
+
+/* empty */
+.empty{
+    text-align:center;
+    color:white;
+    margin-top:80px;
+    font-size:18px;
+}
+
+.back {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back a {
+            color: #29405a;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== Top Bar ===== -->
+<div class="topbar">
+
+    <h1>📘 My Study Notes</h1>
+
+    <div class="controls">
+
+        <!-- Category filter -->
+        <select id="typeFilter" onchange="filterNotes()">
+            <option value="all">All Categories</option>
+
+            {% set types = notes | map(attribute='note_type') | unique %}
+            {% for t in types %}
+                <option value="{{t}}">{{t}}</option>
+            {% endfor %}
+        </select>
+
+        <!-- PDF button -->
+        <button onclick="setTimeout(()=>window.print(),300)">⬇ Save as PDF</button>
+
+
+    </div>
+</div>
+
+
+<!-- ===== Notes Grid ===== -->
+<div class="grid">
+
+{% if notes %}
+    {% for note in notes %}
+    <div class="card noteCard" data-type="{{note.note_type}}">
+
+       <button class="delete-btn" onclick="deleteNote({{ note.id }})">🗑</button>
+
+
+ 
+
+        <div>
+            <span class="badge type">{{note.note_type}}</span>
+            <span class="badge subject">{{note.subject}}</span>
+            <span class="badge unit">Unit {{note.unit}}</span>
+            <span class="badge date">{{note.note_date}}</span>
+        </div>
+
+        <h3 style="margin-top:10px;">
+            📌 {{note.topic_name}}
+        </h3>
+
+        <small style="opacity:0.8;">
+            {{note.chapter}}
+        </small>
+
+        <div class="content">
+            {{note.content}}
+        </div>
+        {% if note.file_name %}
+      <a href="{{ url_for('static', filename='uploads/' + note.file_name) }}" target="_blank">
+      <button style="
+        margin-top:10px;
+        background:#111;
+        color:white;
+        border:none;
+        padding:6px 12px;
+        border-radius:6px;
+        font-size:12px;
+        cursor:pointer;">
+        📎 View File
+    </button>
+    </a>
+    {% endif %}
+
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty">No notes added yet 😔</div>
+{% endif %}
+
+</div>
+
+
+<!-- ===== Filter Script ===== -->
+<script>
+function filterNotes(){
+    let value = document.getElementById("typeFilter").value;
+    let cards = document.querySelectorAll(".noteCard");
+
+    cards.forEach(card=>{
+        if(value === "all" || card.dataset.type === value){
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }  
+    });
+}
+function deleteNote(id){
+    fetch(`/delete_study_note/${id}`, {
+        method: "POST"
+    }).then(() => {
+        location.reload();
+    });
+}
+
+
+</script>
+<div class="back">
+    <a href="/study/notes">⬅ Back to notes manager </a>
+</div>
+</body>
+</html>

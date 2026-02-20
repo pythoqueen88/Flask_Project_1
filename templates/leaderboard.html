@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaderboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin:0;
+            font-family:Segoe UI;
+            background:#000;
+            color:white;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        h2 {
+            margin-top:20px;
+            color:#ff2b2b;
+        }
+
+        #chartContainer {
+            width:90%;
+            max-width:700px;
+            margin-top:30px;
+        }
+
+        button {
+            margin-top:20px;
+            background:#ff2b2b;
+            color:white;
+            border:none;
+            padding:10px 16px;
+            border-radius:8px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h2>🏆 Leaderboard by Difficulty</h2>
+
+<div id="chartContainer">
+    <canvas id="leaderChart"></canvas>
+</div>
+
+<button onclick="location.href='/game'">⬅ Back to Game</button>
+
+<script>
+const rows = {{ data|tojson|safe }};
+
+/*
+rows format coming from Flask:
+
+[
+ { username:"abc@gmail.com", easy:40, medium:20, hard:10, pro:0, total:70 },
+ ...
+]
+*/
+
+const usernames   = rows.map(r => r.username);
+const easyScores  = rows.map(r => r.easy);
+const mediumScores= rows.map(r => r.medium);
+const hardScores  = rows.map(r => r.hard);
+const proScores   = rows.map(r => r.pro);
+
+const ctx = document.getElementById('leaderChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: usernames,
+        datasets: [
+            { label:'Easy',   data:easyScores,   backgroundColor:'rgba(75,192,192,0.7)' },
+            { label:'Medium', data:mediumScores, backgroundColor:'rgba(255,206,86,0.7)' },
+            { label:'Hard',   data:hardScores,   backgroundColor:'rgba(255,99,132,0.7)' },
+            { label:'Pro',    data:proScores,    backgroundColor:'rgba(153,102,255,0.7)' }
+        ]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{ labels:{ color:'white' } }
+        },
+        scales:{
+            x:{ ticks:{ color:'white' }},
+            y:{ beginAtZero:true, ticks:{ color:'white' }}
+        }
+    }
+});
+</script>
+
+
+</body>
+</html>
+

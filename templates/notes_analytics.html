@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes Analytics</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body{
+            font-family: 'Segoe UI', sans-serif;
+            margin:0;
+            padding:30px;
+
+            background: linear-gradient(135deg,#667eea,#764ba2);
+        }
+
+        h1{
+            color:white;
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        /* ---------- Cards ---------- */
+        .cards{
+            display:flex;
+            gap:20px;
+            justify-content:center;
+            margin-bottom:30px;
+        }
+
+        .card{
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding:20px 40px;
+            border-radius:15px;
+            color:white;
+            text-align:center;
+            font-size:22px;
+            animation: fadeUp 0.8s ease;
+        }
+
+        /* ---------- Chart Grid ---------- */
+        .grid{
+            display:grid;
+            grid-template-columns: repeat(auto-fit,minmax(350px,1fr));
+            gap:25px;
+        }
+
+        .chart-box{
+            background:white;
+            border-radius:15px;
+            padding:20px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.25);
+            animation: fadeUp 1s ease;
+        }
+
+        canvas{
+            height:300px !important;
+        }
+
+        @keyframes fadeUp{
+            from{
+                opacity:0;
+                transform: translateY(40px);
+            }
+            to{
+                opacity:1;
+                transform: translateY(0);
+            }
+        }
+
+        .back {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back a {
+            color: #29405a;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<h1>📊 Notes Analytics Dashboard</h1>
+
+
+<!-- ===== Summary Cards ===== -->
+<div class="cards">
+
+    <div class="card">
+        📘 Total Notes<br>
+        <b>{{ total_notes }}</b>
+    </div>
+
+    <div class="card">
+        ⭐ Important<br>
+        <b>{{ type_counts[types.index('Important')] if 'Important' in types else 0 }}</b>
+    </div>
+
+    <div class="card">
+        📚 Subjects<br>
+        <b>{{ subjects|length }}</b>
+    </div>
+
+</div>
+
+
+
+<!-- ===== Charts ===== -->
+<div class="grid">
+
+    <div class="chart-box">
+        <h3>Subject Wise</h3>
+        <canvas id="subjectChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+        <h3>Type Wise</h3>
+        <canvas id="typeChart"></canvas>
+    </div>
+
+    <div class="chart-box">
+        <h3>Monthly Growth</h3>
+        <canvas id="monthChart"></canvas>
+    </div>
+
+</div>
+
+
+<script>
+const subjectsData = JSON.parse('{{ subjects|default([])|tojson|safe }}');
+const subjectCounts = JSON.parse('{{ subject_counts|default([])|tojson|safe }}');
+
+const types = JSON.parse('{{ types|default([])|tojson|safe }}');
+const typeCounts = JSON.parse('{{ type_counts|default([])|tojson|safe }}');
+
+const months = JSON.parse('{{ months|default([])|tojson|safe }}');
+const monthCounts = JSON.parse('{{ month_counts|default([])|tojson|safe }}');
+
+
+// ===== Bar =====
+new Chart(document.getElementById('subjectChart'), {
+    type: 'bar',
+    data: {
+        labels: subjectsData,
+        datasets: [{
+            label: 'Notes',
+            data: subjectCounts
+        }]
+    },
+    options:{
+        animation:{duration:1500}
+    }
+});
+
+
+// ===== Pie =====
+new Chart(document.getElementById('typeChart'), {
+    type: 'pie',
+    data: {
+        labels: types,
+        datasets: [{
+            data: typeCounts
+        }]
+    },
+    options:{
+        animation:{duration:1500}
+    }
+});
+
+
+// ===== Line =====
+new Chart(document.getElementById('monthChart'), {
+    type: 'line',
+    data: {
+        labels: months,
+        datasets: [{
+            label: 'Notes',
+            data: monthCounts,
+            fill:false,
+            tension:0.3
+        }]
+    },
+    options:{
+        animation:{duration:1500}
+    }
+});
+</script>
+<div class="back">
+    <a href="/study/notes">⬅ Back to notes manager </a>
+</div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome | Study Zone</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(270deg, #1d2671, #c33764, #00c6ff);
+            background-size: 600% 600%;
+            animation: gradientBG 10s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating icons */
+        .icon {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.25;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .icon:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+        .icon:nth-child(2) { top: 70%; left: 80%; animation-delay: 2s; }
+        .icon:nth-child(3) { top: 40%; left: 85%; animation-delay: 4s; }
+        .icon:nth-child(4) { top: 75%; left: 15%; animation-delay: 1s; }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+
+        .welcome-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 50px;
+            border-radius: 22px;
+            width: 440px;
+            text-align: center;
+            animation: fadeUp 1.5s ease;
+            z-index: 10;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+ h1 span {
+            color: #00eaff;
+        }
+        .typing {
+            font-size: 15px;
+            height: 20px;
+            margin-bottom: 30px;
+            border-right: 2px solid white;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 4s steps(40) infinite alternate,
+                       blink 0.7s infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        .desc {
+            font-size: 14px;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .btn-group a {
+            display: block;
+            margin: 12px 0;
+            padding: 13px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn {
+            background: white;
+            color: #1d2671;
+        }
+
+        .register-btn {
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-group a:hover {
+            transform: scale(1.06);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        footer {
+            margin-top: 22px;
+            font-size: 12px;
+            opacity: 0.75;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Icons -->
+    <div class="icon">📘</div>
+    <div class="icon">⭐</div>
+    <div class="icon">📊</div>
+    <div class="icon">✏️</div>
+
+    <div class="welcome-box">
+       <h1>Welcome to <span>IntelliMate</span></h1>
+        <div class="typing">
+            Smart life • Focused goals • Better future 🚀
+        </div>
+
+     <div class="desc">
+            IntelliMate helps you manage your studies, finances and productivity  
+            in one intelligent platform designed for growth.
+        </div>
+
+        <div class="btn-group">
+            <a href="/login" class="login-btn">Login</a>
+            <a href="/register" class="register-btn">Create Account</a>
+        </div>
+
+        <footer>
+            Learn Smarter, Not Harder 💙<br>
+            BELIEVE IN YOUR HUSTLE -- NOT IN LUCK 💎
+        </footer>
+    </div>
+
+</body>
+</html>

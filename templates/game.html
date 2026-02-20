@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Focus Challenge V4 Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+/* ================= THEME ================= */
+body{
+margin:0;
+background:#000;
+color:#ff2b2b;
+font-family:Segoe UI;
+overflow:hidden;
+}
+
+/* ================= SIDEBAR ================= */
+.menu{
+position:fixed;
+top:12px;
+left:12px;
+font-size:26px;
+background:none;
+border:none;
+color:red;
+cursor:pointer;
+z-index:10;
+}
+
+.sidebar{
+position:fixed;
+left:-220px;
+top:0;
+width:220px;
+height:100%;
+background:#111;
+transition:.3s;
+padding-top:60px;
+}
+
+.sidebar.active{left:0;}
+
+.sidebar a,
+.sidebar button{
+display:block;
+padding:14px;
+color:red;
+background:none;
+border:none;
+width:100%;
+text-align:left;
+border-bottom:1px solid #222;
+cursor:pointer;
+}
+
+/* ================= CENTER CARD ================= */
+.center{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.card{
+width:95%;
+max-width:360px;
+background:#111;
+padding:22px;
+border-radius:14px;
+border:2px solid red;
+text-align:center;
+box-shadow:0 0 25px red;
+}
+
+/* ================= STATS ================= */
+.stats{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+font-size:14px;
+}
+
+.timer{
+height:7px;
+background:red;
+margin:10px 0;
+transition:width 1s linear;
+}
+
+input{
+padding:8px;
+background:black;
+color:white;
+border:1px solid red;
+width:70%;
+}
+
+select,button{
+background:red;
+color:white;
+border:none;
+padding:7px 12px;
+margin:5px;
+cursor:pointer;
+}
+.sidebar a,
+.sidebar button {
+    display: block;
+    padding: 14px;
+    color: red;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid #222; /* optional, only if you want one line */
+    text-decoration: none;  /* <-- remove underline */
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* game over */
+.gameover{display:none}
+.back{
+    text-align:center;
+    margin-bottom:25px;
+}
+.back a{
+    color:#ffeabe;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+    .container{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= MENU ================= -->
+<button class="menu" id="menuBtn">☰</button>
+
+<div class="sidebar" id="side">
+<a href="/profile">Profile</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/history">history</a>
+<a href="/help">help</a>
+
+
+</div>
+
+
+<!-- ================= GAME ================= -->
+<div class="center">
+
+<div class="card" id="gameBox">
+
+<h2>Focus Challenge</h2>
+
+<select id="difficulty">
+<option value="easy">easy</option>
+<option value="medium">medium</option>
+<option value="hard">hard</option>
+<option value="pro">pro</option>
+</select>
+
+<div class="stats">e
+<span>⭐ <b id="score">0</b></span>
+<span>🔥 x<b id="combo">1</b></span>
+<span>❤️ <b id="life">3</b></span>
+</div>
+
+<div class="timer" id="timerBar"></div>
+
+<h3 id="question">Press Start</h3>
+
+<input id="ans" placeholder="Answer">
+<br>
+<button type="button" onclick="startGame()">Start</button>
+
+
+<p>⏳ Time: <span id="time">20</span>s</p>
+
+</div>
+
+
+<div class="card gameover" id="overBox">
+<h2>Game Over</h2>
+<p>Score: <b id="fScore"></b></p>
+<p>Accuracy: <b id="fAcc"></b>%</p>
+<button onclick="location.reload()">Play Again</button>
+</div>
+
+</div>
+
+
+<script>
+/* ================= ELEMENTS ================= */
+const ans = document.getElementById("ans")
+const scoreEl = document.getElementById("score")
+const comboEl = document.getElementById("combo")
+const lifeEl = document.getElementById("life")
+const timeEl = document.getElementById("time")
+const timerBarEl = document.getElementById("timerBar")
+const questionEl = document.getElementById("question")
+const gameBox = document.getElementById("gameBox")
+const overBox = document.getElementById("overBox")
+const fScore = document.getElementById("fScore")
+const fAcc = document.getElementById("fAcc")
+const difficulty = document.getElementById("difficulty")
+
+/* ================= GLOBAL STATE ================= */
+let score = 0
+let combo = 1
+let lives = 3
+let correct = 0
+let total = 0
+let answer = 0
+let seconds = 20
+let timer = null
+let level = "easy"
+
+/* ================= SIDEBAR ================= */
+const menuBtn = document.getElementById("menuBtn")
+const side = document.getElementById("side")
+
+menuBtn.onclick = () => side.classList.toggle("active")
+
+
+/* ================= SAVE SCORE ================= */
+function saveScore(score, time, accuracy, level){
+    fetch("/save_score", {
+        method:"POST",
+        credentials:"same-origin",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({score,time,accuracy,level})
+    })
+}
+
+
+/* ================= START GAME ================= */
+function startGame(){
+
+    // reset everything
+    score = 0
+    combo = 1
+    lives = 3
+    correct = 0
+    total = 0
+
+    level = difficulty.value
+
+    updateUI()
+    generate()
+}
+
+
+/* ================= TIMER ================= */
+function startTimer(){
+
+    clearInterval(timer)
+
+    seconds = 20
+    timeEl.innerText = seconds
+    timerBarEl.style.width = "100%"
+
+    timer = setInterval(()=>{
+
+        seconds--
+        timeEl.innerText = seconds
+        timerBarEl.style.width = (seconds/20*100) + "%"
+
+        if(seconds<=0) wrong()
+
+    },1000)
+}
+
+
+/* ================= RANDOM ================= */
+function rand(a,b){
+    return Math.floor(Math.random()*(b-a+1))+a
+}
+
+
+/* ================= GENERATE QUESTION ================= */
+function generate(){
+
+total++
+
+let a,b,c,type,q
+
+/* ================= EASY ================= */
+if(level==="easy"){
+
+type=rand(1,4)
+
+if(type===1){
+a=rand(1,10); b=rand(1,10)
+q=`${a} + ${b}`
+answer=a+b
+}
+
+else if(type===2){
+a=rand(10,20); b=rand(1,10)
+q=`${a} - ${b}`
+answer=a-b
+}
+
+else if(type===3){
+a=rand(1,9)
+q=`${a}, ${a*2}, ${a*3}, ?`
+answer=a*4
+}
+
+else{
+a=rand(1,50)
+q=`Count digits of ${a}`
+answer=String(a).length
+}
+}
+
+
+/* ================= MEDIUM ================= */
+else if(level==="medium"){
+
+type=rand(1,4)
+
+if(type===1){
+a=rand(10,30); b=rand(2,5)
+q=`${a} × ${b}`
+answer=a*b
+}
+
+else if(type===2){
+a=rand(50,100); b=rand(2,5)
+q=`${a} ÷ ${b}`
+answer=Math.floor(a/b)
+}
+
+else if(type===3){
+a=rand(1,50); b=rand(1,50)
+q=`Bigger number: ${a} or ${b}`
+answer=Math.max(a,b)
+}
+
+else{
+a=rand(2,5)
+q=`${a}, ${a*3}, ${a*9}, ?`
+answer=a*27
+}
+}
+
+
+/* ================= HARD ================= */
+else if(level==="hard"){
+
+type=rand(1,5)
+
+if(type===1){
+a=rand(10,30)
+q=`Square of ${a}`
+answer=a*a
+}
+
+else if(type===2){
+a=rand(100,500); b=rand(5,10)
+q=`${a} ÷ ${b}`
+answer=Math.floor(a/b)
+}
+
+else if(type===3){
+a=rand(10,99)
+q=`Reverse of ${a}`
+answer=Number(String(a).split('').reverse().join(''))
+}
+
+else if(type===4){
+a=rand(10,50); b=rand(10,50)
+q=`${a} × ${b}`
+answer=a*b
+}
+
+else{
+let arr=[rand(2,10),rand(2,10),rand(2,10)]
+q=`Odd one: ${arr[0]*2}, ${arr[1]*2}, ${arr[2]*2+1}`
+answer=arr[2]*2+1
+}
+}
+
+
+/* ================= PRO ================= */
+else{
+
+type=rand(1,5)
+
+if(type===1){
+a=rand(10,30)
+q=`√${a*a}`
+answer=a
+}
+
+else if(type===2){
+a=rand(10,99)
+let sum=0
+for(let d of String(a)) sum+=Number(d)
+q=`Compression sum of ${a}`
+answer=sum
+}
+
+else if(type===3){
+a=rand(10,99); b=rand(10,99)
+q=`${a} ? ${b} (enter > or < or =)`
+if(a>b) answer=">"
+else if(a<b) answer="<"
+else answer="="
+}
+
+else if(type===4){
+a=rand(100,999)
+q=`Memory: ${a} (remember)`
+answer=a
+
+setTimeout(()=>{
+question.innerText="Type the number now"
+},2000)
+}
+
+else{
+a=rand(20,50); b=rand(20,50)
+q=`(${a}+${b}) × 2`
+answer=(a+b)*2
+}
+}
+
+    questionEl.innerText = q
+    ans.value=""
+    ans.focus()
+
+    startTimer()
+}
+
+
+/* ================= CHECK ================= */
+ans.addEventListener("keypress", e=>{
+    if(e.key==="Enter") check()
+})
+
+function check(){
+
+    if(ans.value.trim()==String(answer)){
+        correct++
+        combo++
+        score += 10*combo
+    }else{
+        wrong()
+    }
+
+    updateUI()
+    generate()
+}
+
+
+/* ================= WRONG ================= */
+function wrong(){
+
+    combo = 1
+    lives--
+
+    updateUI()
+
+    if(lives<=0) endGame()
+}
+
+
+/* ================= UPDATE UI ================= */
+function updateUI(){
+    scoreEl.innerText = score
+    comboEl.innerText = combo
+    lifeEl.innerText = lives
+}
+
+
+/* ================= END GAME ================= */
+function endGame(){
+
+    clearInterval(timer)
+
+    gameBox.style.display="none"
+    overBox.style.display="block"
+
+    let acc = total?Math.round(correct/total*100):0
+
+    fScore.innerText = score
+    fAcc.innerText = acc
+
+    saveScore(score,20-seconds,acc,level)
+}
+</script>
+
+<div class="back">
+    <a href="/fun_focus"> ⬅ Back to Fun & Focus Zone </a>
+</div>
+  
+</body>
+
+</html>

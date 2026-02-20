@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Motivation Zone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI, Arial;
+    background:linear-gradient(135deg,#141e30,#141e30);
+    color:white;
+}
+
+/* HEADER */
+h2{
+    text-align:center;
+    padding:18px;
+    letter-spacing:1px;
+}
+
+/* ===== LAYOUT ===== */
+.container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:25px;
+    padding:25px;
+}
+
+/* ===== CARDS ===== */
+.card{
+    flex:1;
+    min-width:320px;
+background:rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:18px;
+    padding:20px;
+   
+    display:flex;
+    flex-direction:column;
+}
+
+/* ===== QUOTE BOX (small + center) ===== */
+.quote{
+    height:280px;
+    border-radius:12px;
+    padding:15px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    text-align:center;
+}
+
+.quote-img{
+    width:100%;
+    height:220px;
+    image-rendering:pixelated;
+    object-fit:cover;   /* FULL image show */
+    border-radius:10px;
+}
+
+
+.quote-text{
+    font-size:20px;
+    font-weight:600;
+}
+
+
+/* ===== PLAYLIST (scroll enabled) ===== */
+#playlist{
+    margin-top:10px;
+    max-height:300px;      /* fixed height */
+    overflow-y:auto;       /* scroll */
+    padding-right:6px;
+}
+
+/* scrollbar */
+#playlist::-webkit-scrollbar{
+    width:6px;
+}
+#playlist::-webkit-scrollbar-thumb{
+    background:#ff2b2b;
+    border-radius:6px;
+}
+
+/* songs */
+.song{
+    padding:10px;
+    margin:6px 0;
+    background:rgba(255,255,255,0.07);
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.song:hover{
+    background:#ff2b2b;
+    color:black;
+}
+
+.active{
+    background:#ff2b2b;
+    color:black;
+}
+
+/* ===== PLAYER ===== */
+.controls{
+    margin-top:12px;
+    text-align:center;
+}
+
+button{
+   background:#ff3b3b;
+    border:none;
+    padding:8px 14px;
+    color:white;
+    border-radius:8px;
+    margin:5px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    background:#ff4040;
+}
+
+/* back link */
+.back{
+    text-align:center;
+    margin-bottom:25px;
+}
+.back a{
+    color:#c7a55b;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+    .container{
+        flex-direction:column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>✨ Motivation Dashboard</h2>
+
+<div class="container">
+
+<!-- QUOTES -->
+<div class="card">
+<h3>💬 Daily Quotes</h3>
+<div class="quote">
+    <img id="quoteImg" class="quote-img">
+    <div id="quoteText" class="quote-text"></div>
+</div>
+</div>
+
+
+
+<!-- MUSIC -->
+<div class="card">
+
+<h3>🎵 Motivation Songs</h3>
+
+<div id="playlist"></div>
+
+<audio id="player"></audio>
+
+<div class="controls">
+<button onclick="prevSong()">⏮ Prev</button>
+<button onclick="togglePlay()">▶ Play / ⏸ Pause</button>
+<button onclick="nextSong()">⏭ Next</button>
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* ================= QUOTES ================= */
+
+/* ================= QUOTES + IMAGES ================= */
+
+let quotesData = [
+
+{ text:"HUSTLE , until you shine.", img:"/static/images/im1.jpg" },
+{ text:"Dream big start samll . ACT NOW.", img:"/static/images/im3.jpg" },
+{ text:"success begins with self belief", img:"/static/images/im4.jpg" },
+{ text:"progress not perfection", img:"/static/images/im2.jpg" },
+{ text:"success needs consistency", img:"/static/images/im6.jpg" },
+{ text:"every day is a fresh start", img:"/static/images/im5.jpg" },
+{ text:"focus makes you powerful", img:"/static/images/im7.jpg" },
+{ text:"never give up", img:"/static/images/im9.jpg" },
+{ text:"small steps everyday", img:"/static/images/im8.jpg" },
+{ text:"be better than yesterday", img:"/static/images/im11.jpg" },
+{ text:"Believe in yourself", img:"/static/images/im10.jpg" },
+{ text:"discipline creates freedom", img:"/static/images/im12.jpg" },
+{ text:"stay positive", img:"/static/images/im13.jpg" }
+
+];
+
+let quoteText = document.getElementById("quoteText");
+let quoteImg  = document.getElementById("quoteImg");
+
+let qi = 0;
+
+function changeQuote(){
+    quoteText.innerText = quotesData[qi].text;
+    quoteImg.src = quotesData[qi].img;
+
+    qi = (qi+1) % quotesData.length;
+}
+
+changeQuote();
+setInterval(changeQuote, 3000);
+
+
+
+/* ================= MUSIC PLAYER ================= */
+
+let songs = [
+{ name:"Rise & Shine", file:"{{ url_for('static', filename='music/song1.mp3') }}" },
+{ name:"Power Inside", file:"{{ url_for('static', filename='music/song2.mp3') }}" },
+{ name:"No Limits", file:"{{ url_for('static', filename='music/song3.mp3') }}" },
+{ name:"Focus Mode", file:"{{ url_for('static', filename='music/song4.mp3') }}" },
+{ name:"Energy Boost", file:"{{ url_for('static', filename='music/song5.mp3') }}" },
+{ name:"Never Stop", file:"{{ url_for('static', filename='music/song6.mp3') }}" },
+{ name:"Warrior Mind", file:"{{ url_for('static', filename='music/song7.mp3') }}" },
+{ name:"Victory Path", file:"{{ url_for('static', filename='music/song8.mp3') }}" },
+{ name:"Success Beats", file:"{{ url_for('static', filename='music/song9.mp3') }}" },
+{ name:"Dream Runner", file:"{{ url_for('static', filename='music/song10.mp3') }}" },
+{ name:"Final Push", file:"{{ url_for('static', filename='music/song11.mp3') }}" }
+];
+
+let playlist = document.getElementById("playlist");
+let player = document.getElementById("player");
+
+let current = 0;
+
+
+/* CREATE PLAYLIST UI */
+songs.forEach((s,i)=>{
+    let div = document.createElement("div");
+    div.className="song";
+    div.innerText = (i+1)+". "+s.name;
+    div.onclick = ()=> playSong(i);
+    playlist.appendChild(div);
+});
+
+
+function highlight(){
+    document.querySelectorAll(".song").forEach(e=>e.classList.remove("active"));
+    document.querySelectorAll(".song")[current].classList.add("active");
+}
+
+function playSong(i){
+    current=i;
+    player.src = songs[i].file;
+    player.play();
+    highlight();
+}
+
+function nextSong(){
+    current = (current+1)%songs.length;
+    playSong(current);
+}
+
+function prevSong(){
+    current = (current-1+songs.length)%songs.length;
+    playSong(current);
+}
+
+function togglePlay(){
+    if(player.paused) player.play();
+    else player.pause();
+}
+
+/* AUTO NEXT */
+player.onended = nextSong;
+
+</script>
+<div class="back">
+    <a href="/fun_focus"> ⬅ Back to Fun & Focus Zone </a>
+</div>
+</body>
+</html>

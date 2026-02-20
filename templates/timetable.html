@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Study Timetable</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:linear-gradient(135deg,#4e73df,#1cc88a);
+}
+
+.box{
+    width:420px;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+}
+
+select,button{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+}
+
+button{
+    background:#4e73df;
+    color:white;
+    border:none;
+}
+
+      .back {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back a {
+            color: #395371;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2 align="center">📅 Study Timetable Generator</h2>
+
+<form action="/generate_timetable" method="POST">
+
+<select onchange="loadBranches(this.value)" required>
+<option>Select Course</option>
+{% for c in courses %}
+<option value="{{c[0]}}">{{c[1]}}</option>
+{% endfor %}
+</select>
+
+<select id="branch" onchange="loadClasses(this.value)" required></select>
+
+<select name="class_id" id="class" required></select>
+
+<button type="submit">Generate Timetable</button><br>
+
+
+</form>
+</div>
+
+<script>
+function loadBranches(id){
+fetch("/get_branches/"+id)
+.then(r=>r.json())
+.then(data=>{
+let b=document.getElementById("branch");
+b.innerHTML="";
+data.forEach(x=>{
+b.innerHTML+=`<option value="${x[0]}">${x[1]}</option>`;
+});
+});
+}
+
+function loadClasses(id){
+fetch("/get_classes/"+id)
+.then(r=>r.json())
+.then(data=>{
+let c=document.getElementById("class");
+c.innerHTML="";
+data.forEach(x=>{
+c.innerHTML+=`<option value="${x[0]}">${x[1]}</option>`;
+});
+});
+}
+</script>
+<div class="back">
+    <a href="/study">⬅ Back to Study Zone</a>
+</div>
+
+</body>
+</html>

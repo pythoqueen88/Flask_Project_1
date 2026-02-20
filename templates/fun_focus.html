@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fun & Focus Zone</title>
+
+    <style>
+        body{
+            font-family:Poppins, sans-serif;
+            margin:0;
+            background:linear-gradient(135deg,#0f172a,#111827);
+            color:#6a6363;
+        }
+
+        .container{
+            max-width:1000px;
+            margin:70px auto;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+            gap:30px;
+            padding:20px;
+        }
+
+        .card{
+            background:white;
+            padding:40px 25px;
+            border-radius:10px;
+            text-align:center;
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);
+            transition:.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-6px);
+            box-shadow:0 8px 18px rgba(0,0,0,0.15);
+        }
+
+        h2{
+            text-align:center;
+            margin-top:40px;
+            color:#8db9d0;
+        }
+
+        .btn{
+            display:inline-block;
+            margin-top:15px;
+            padding:10px 22px;
+            background:#2f3e46;
+            color:white;
+            text-decoration:none;
+            border-radius:6px;
+        }
+        .back {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back a {
+            color: #204969;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>😎 Fun & Focus Zone</h2>
+
+<div class="container">
+
+    <div class="card">
+        <h3>🎮 Game Dashboard</h3>
+        <p>Play brain games and improve focus</p>
+        <a href="/game" class="btn">Play Now</a>
+    </div>
+
+    <div class="card">
+        <h3>💡 Motivation </h3>
+        <p>Read daily quotes & stay motivated</p>
+        <a href="/motivational" class="btn">Open</a>
+    </div>
+
+</div>
+ <div class="back">
+    <a href="/"> ⬅ Back to Home </a>
+</div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Graph</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #3b4141;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            background: #f7f0f0;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            color: #425644;
+            margin-bottom: 25px;
+        }
+
+        .filter-box {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 10px;
+            width: 220px;
+            border-radius: 8px;
+            border: 1px solid #3b4141;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 10px 22px;
+            background: linear-gradient(135deg, #425644, #6b8f71);
+            color: #f4f8f6;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .graph-box {
+            background: #f4f8f6;
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        img {
+            display: block;
+            margin: auto;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .info {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 15px;
+            color: #2f3e34;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back a {
+            text-decoration: none;
+            color: #425644;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🌿 Category-wise Expense Analysis</h2>
+
+    <!-- CATEGORY DROPDOWN -->
+    <form method="POST" class="filter-box">
+        <select name="category" required>
+            <option value="">Select Category</option>
+
+            {% if categories %}
+                {% for c in categories %}
+                    <option value="{{ c }}"
+                        {% if selected_category and c == selected_category %}selected{% endif %}>
+                        {{ c }}
+                    </option>
+                {% endfor %}
+            {% endif %}
+        </select>
+
+        <button type="submit">View</button>
+    </form>
+
+    <!-- GRAPH -->
+    {% if graph_url %}
+        <div class="graph-box">
+            <img src="data:image/png;base64,{{ graph_url }}">
+        </div>
+
+        <div class="info">
+            💰 <b>Total Spent:</b> ₹ {{ total_amount }}
+        </div>
+    {% else %}
+        <div class="info">
+            No data available for selected category.
+        </div>
+    {% endif %}
+
+    <div class="back">
+        
+        <a href="/finance">⬅ Back to Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Features - Focus Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #eef2f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .card h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: #555;
+            line-height: 1.5;
+        }
+        .card a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Focus Game - Help & Features</h1>
+        <div class="cards">
+            <!-- Gameplay Tips -->
+            <div class="card">
+                <h2>Gameplay Tips</h2>
+                <p>Improve your focus by playing games regularly. Try to complete levels faster and increase your accuracy for higher scores.</p>
+            </div>
+
+            <!-- History Tracking -->
+            <div class="card">
+                <h2>History Tracking</h2>
+                <p>Check your <a href="{{ url_for('history') }}">history</a> to see past games, scores, time taken, accuracy, and levels completed.</p>
+            </div>
+
+            <!-- Levels & Challenges -->
+            <div class="card">
+                <h2>Levels & Challenges</h2>
+                <p>Progress through different levels. Each level becomes more challenging to help you enhance focus and concentration skills.</p>
+            </div>
+
+            <!-- Productivity & Fun Zones -->
+            <div class="card">
+                <h2>Productivity & Fun Zones</h2>
+                <p>Use productivity zone for learning and fun zone for relaxation. Balance your focus and recreation for optimal results.</p>
+            </div>
+
+            <!-- Scoring & Achievements -->
+            <div class="card">
+                <h2>Scoring & Achievements</h2>
+                <p>Your scores, accuracy, and completion times are tracked. Aim for achievements and high scores to motivate yourself.</p>
+            </div>
+
+            <!-- Support & Contact -->
+            <div class="card">
+                <h2>Support & Contact</h2>
+                <p>If you face any issues, contact support at <a href="mailto:support@example.com">support@example.com</a> or report issues via the feedback form in the dashboard.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

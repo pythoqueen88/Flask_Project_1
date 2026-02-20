@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Profile</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI;
+    background:#000;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+/* Card */
+.card{
+    width:90%;
+    max-width:350px;
+    background:#111;
+    padding:25px;
+    border-radius:15px;
+    border:2px solid #ff2b2b;
+    box-shadow:0 0 20px #ff2b2b;
+    text-align:center;
+}
+
+/* Avatar */
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#ff2b2b;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:32px;
+    margin:auto;
+    margin-bottom:15px;
+}
+
+.stat{
+    background:#1a1a1a;
+    padding:10px;
+    margin:8px 0;
+    border-radius:8px;
+    border:1px solid #ff2b2b;
+}
+
+button{
+    margin-top:15px;
+    background:#ff2b2b;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:8px;
+}
+
+.no-games{
+    margin-top:10px;
+    font-size:14px;
+    color:#ff9999;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="avatar">👤</div>
+
+<h2>{{ user }}</h2>
+
+{% if games > 0 %}
+<div class="stat">⭐ Total Score: {{ total }}</div>
+<div class="stat">🎮 Games Played: {{ games }}</div>
+<div class="stat">🎯 Best Score: {{ best }}</div>
+<div class="stat">📊 Accuracy: {{ acc }}%</div>
+{% else %}
+<div class="no-games">You haven't played any games yet!<br>Start your first Focus Challenge! 🎯</div>
+{% endif %}
+
+<button onclick="location.href='/game'">⬅ Back</button>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Zone | IntelliMate</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(to right, #111827, #1f2937);
+            color: white;
+        }
+
+        header {
+            padding: 25px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            background: #0f172a;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+            padding: 50px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: 18px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+        }
+
+        .icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .desc {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .back {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>📚 Study Zone</header>
+
+<div class="container">
+
+    <div class="card" onclick="location.href='/study/notes'">
+        <div class="icon">📝</div>
+        <div class="title">Notes Manager</div>
+        <div class="desc">Create, organize & manage your study notes</div>
+    </div>
+
+    <div class="card" onclick="location.href='/timetable'">
+        <div class="icon">⏰</div>
+        <div class="title">Timetable Planner</div>
+        <div class="desc">Plan daily & weekly study schedules</div>
+    </div>
+
+    <div class="card" onclick="location.href='/auto_notes'">
+        <div class="icon">🤖</div>
+        <div class="title">Auto Notes Generator</div>
+        <div class="desc">Generate smart notes from topics (AI-style)</div>
+    </div>
+
+</div>
+
+<div class="back">
+    <a href="/"> ⬅ Back to Home </a>
+</div>
+
+</body>
+</html>

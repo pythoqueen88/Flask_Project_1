@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register | IntelliMate</title>
+
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1d2671,#c33764);
+    overflow:hidden;
+}
+
+body::before{
+    content:"";
+    position:absolute;
+    width:420px;
+    height:420px;
+    background:#ff9fcb;
+    border-radius:50%;
+    filter:blur(140px);
+    animation:float 6s infinite alternate;
+}
+
+@keyframes float{
+    from{transform:translate(-120px,-100px);}
+    to{transform:translate(140px,120px);}
+}
+
+.card{
+    background:rgba(255,255,255,0.14);
+    backdrop-filter:blur(18px);
+    padding:35px;
+    width:360px;
+    border-radius:18px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.4);
+    color:white;
+    animation:fade 1s ease;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.card h2{text-align:center;margin-bottom:8px;}
+.card p{text-align:center;font-size:14px;margin-bottom:25px;}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:10px;
+    background:rgba(255,255,255,0.2);
+    color:white;
+    outline:none;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:25px;
+    background:#ff9fcb;
+    color:#5b0033;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{opacity:0.9;}
+
+.link{text-align:center;margin-top:15px;}
+.link a{color:#ff9fcb;text-decoration:none;}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Create Account ✨</h2>
+    <p>Start organizing your life with IntelliMate</p>
+
+    
+    <form method="POST" autocomplete="off">
+
+    <input type="text"
+           name="fullname"
+           placeholder="Full Name"
+           autocomplete="off"
+           autocapitalize="off"
+           spellcheck="false"
+           value="">
+
+    <input type="email"
+           name="email"
+           placeholder="Email"
+           autocomplete="off"
+           value="">
+
+    <input type="text"
+           name="phone"
+           placeholder="Phone Number"
+           autocomplete="off"
+           value="">
+    <div style="position:relative;">
+    <input type="password"
+           name="password"
+           placeholder="Create Password"
+           autocomplete="new-password"
+           value="">
+<i class="fa fa-eye" onclick="togglePass()" 
+           style="position:absolute;right:15px;top:14px;cursor:pointer;"></i>
+    </div>
+
+    <button type="submit">Register</button>
+</form>
+
+
+
+
+    <div class="link">
+        Already have an account? <a href="/login">Login</a>
+    </div>
+</div>
+
+</body>
+</html>

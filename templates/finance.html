@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Zone | IntelliMate</title>
+  <style>
+    /* General Styling */
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #2b2a28, #2b2a28);
+      color: #058778;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(153, 149, 169, 0.15);
+      backdrop-filter: blur(10px);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .navbar h2 {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .menu a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .menu a:hover {
+      text-decoration: underline;
+      color: #f8f9fa;
+    }
+    
+    /* Section */
+    .finance-section {
+      text-align: center;
+      padding: 60px 20px;
+      color: white;
+    }
+    .finance-section h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+    .finance-section p {
+      font-size: 1.1em;
+      opacity: 0.9;
+      margin-bottom: 40px;
+    }
+
+    /* Card Container */
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    /* Individual Card */
+    .card {
+      background: white;
+      color: #333;
+      width: 280px;
+      border-radius: 16px;
+      padding: 25px 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+    .card h3 {
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 0.95em;
+      color: #555;
+    }
+
+    /* Footer */
+    
+
+    @media (max-width: 768px) {
+      .card-container { flex-direction: column; align-items: center; }
+    }
+    .back {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <h2>💼 IntelliMate - Finance Zone</h2>
+    <div class="menu">
+      <a href="{{ url_for('home') }}">Home</a>  
+    </div>
+  </nav>
+
+  <!-- Finance Zone Section -->
+  <section class="finance-section">
+    <h1>Welcome to Your Finance Zone</h1>
+    <p>Manage your expenses, visualize spending, and generate reports easily.</p>
+
+    <div class="card-container">
+
+      <!-- Add Expense --
+
+      <!-- Add Expense -->
+      <a class="card" href="{{ url_for('add_expense') }}">
+        <h3>➕ Add Expense</h3>
+        <p>Add your daily expenses with category, date, and payment mode.</p>
+      </a>
+
+      <!-- View Graph -->
+      <a class="card" href="{{ url_for ('graph') }}">
+        <h3>📊 View Graph</h3>
+        <p>See your expenses as a visual chart that updates automatically.</p>
+      </a>
+
+      <!-- View Report -->
+      <a class="card" href="{{ url_for ('report') }}">
+        <h3>📄 View Report</h3>
+        <p>Generate monthly and category-wise reports of your spending.</p>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="back">
+    <a href="/"> ⬅ Back to Home </a>
+</div>
+  
+
+</body>
+</html>

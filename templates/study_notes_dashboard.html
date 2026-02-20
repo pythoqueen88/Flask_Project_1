@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes Manager | IntelliMate</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(to right, #111827, #1f2937);
+            color: white;
+        }
+
+        header {
+            padding: 25px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            background: #0f172a;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            padding: 50px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: 18px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .desc {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .back {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .back a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+
+    </style>
+</head>
+
+<body>
+
+<header>📘 Notes Manager</header>
+
+<div class="container">
+
+    <div class="card" onclick="location.href='/study/notes/add'">
+        <div class="icon">➕</div>
+        <div class="title">Add Notes</div>
+        <div class="desc">Create & save new study notes</div>
+    </div>
+
+    <div class="card" onclick="location.href='/study/notes/view'">
+        <div class="icon">📂</div>
+        <div class="title">View Notes</div>
+        <div class="desc">Browse and manage your notes</div>
+    </div>
+
+
+    <div class="card" onclick="location.href='/study/notes/analytics'">
+        <div class="icon">📊</div>
+        <div class="title">Notes Analytics</div>
+        <div class="desc">Track your notes activity</div>
+    </div>
+
+</div>
+
+
+<div class="back">
+    <a href="/study">⬅ Back to Study Zone</a>
+</div>
+
+</body>
+</html>
