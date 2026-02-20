@@ -1,7 +1,5 @@
 from datetime import date
 import os
-from tkinter import INSERT
-from tkinter import INSERT
 from urllib import response
 from django import db
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
@@ -963,4 +961,5 @@ def motivational():
 
 
 if __name__ == '__main__':
+
     app.run(debug=True) 
